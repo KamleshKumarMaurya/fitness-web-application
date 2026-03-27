@@ -1,0 +1,237 @@
+import { Component, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { LucideAngularModule, Activity, Clock, Flame, Calendar, MapPin, Heart, Footprints, ArrowLeft, Check, Sparkles, ChevronRight, Lightbulb } from 'lucide-angular';
+import { ActivityService, Activity as ActivityModel } from '../../core/services/activity.service';
+import { ToastService } from '../../core/services/toast.service';
+import { ThemeService } from '../../core/services/theme.service';
+import { animate, style, transition, trigger } from '@angular/animations';
+
+@Component({
+  selector: 'app-add-activity',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, LucideAngularModule],
+  template: `
+    <div class="min-h-screen bg-white dark:bg-[#050505] transition-colors duration-500 pb-20 font-sans tracking-tight relative overflow-x-hidden text-slate-900 dark:text-slate-100">
+      <!-- Background Decorative Elements -->
+      <div class="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden z-0">
+        <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-0 -right-[10%] w-[30%] h-[50%] bg-secondary/10 blur-[120px] rounded-full"></div>
+      </div>
+
+      <nav class="sticky top-0 z-50 glass">
+        <div class="max-w-5xl mx-auto px-8 h-20 flex justify-between items-center text-slate-900 dark:text-slate-100">
+          <a routerLink="/dashboard" class="flex items-center gap-2 text-slate-500 dark:text-slate-400 font-black uppercase text-xs tracking-widest hover:text-primary transition-colors">
+            <lucide-angular [img]="ArrowLeft" class="w-4 h-4"></lucide-angular>
+            <span>Back</span>
+          </a>
+          <h1 class="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter italic">Track <span class="text-primary">Workout</span></h1>
+          <div class="w-10"></div> <!-- Spacer -->
+        </div>
+      </nav>
+
+      <main class="max-w-5xl mx-auto px-8 mt-20 relative z-10 text-slate-900 dark:text-slate-100">
+          <div class="flex flex-col lg:flex-row gap-16 items-start">
+            <section class="flex-1 w-full animate-in fade-in slide-in-from-left-4 duration-500">
+              <form [formGroup]="activityForm" (ngSubmit)="onSubmit()" class="space-y-12">
+                <!-- Activity Type Picker -->
+                <div class="space-y-6">
+                  <label class="text-[10px] font-black uppercase tracking-[0.3em] text-primary flex items-center gap-3 ml-1">
+                    <lucide-angular [img]="Sparkles" class="w-4 h-4"></lucide-angular> Select Exercise Category
+                  </label>
+                  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    @for (type of activityTypes; track type) {
+                      <button type="button" 
+                              (click)="selectType(type)"
+                              [class.ring-4]="activityForm.get('activityType')?.value === type"
+                              class="group p-6 rounded-[2.5rem] border-2 transition-all flex flex-col items-center gap-4 cursor-pointer card-hover"
+                              [ngClass]="activityForm.get('activityType')?.value === type 
+                                ? 'border-primary bg-primary/10 text-primary ring-primary/20 shadow-lg shadow-primary/10' 
+                                : 'border-slate-50 dark:border-white/5 bg-white dark:bg-white/5 text-slate-400 dark:text-slate-600 hover:border-primary/40'">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-white/5 flex items-center justify-center group-hover:bg-primary transition-all duration-300">
+                          <lucide-angular [img]="Activity" class="w-6 h-6 group-hover:text-white transition-colors"></lucide-angular>
+                        </div>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-center">{{ type }}</span>
+                      </button>
+                    }
+                  </div>
+                </div>
+
+                <!-- Main Metrics -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                  <div class="space-y-4">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-600 ml-1">Duration (Min)</label>
+                    <div class="relative group">
+                      <lucide-angular [img]="Clock" class="absolute left-8 top-1/2 -translate-y-1/2 w-7 h-7 text-slate-300 dark:text-slate-700 group-focus-within:text-primary transition-colors"></lucide-angular>
+                      <input type="number" formControlName="duration" placeholder="0" 
+                             class="w-full h-20 bg-slate-50 dark:bg-white/5 border-2 border-slate-50 dark:border-white/5 rounded-[1.8rem] pl-24 pr-8 text-2xl font-black text-slate-900 dark:text-white focus:outline-none focus:border-primary/50 transition-all shadow-sm">
+                    </div>
+                  </div>
+                  <div class="space-y-4">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-600 ml-1">Calories Burned</label>
+                    <div class="relative group">
+                      <lucide-angular [img]="Flame" class="absolute left-8 top-1/2 -translate-y-1/2 w-7 h-7 text-slate-300 dark:text-slate-700 group-focus-within:text-orange-500 transition-colors"></lucide-angular>
+                      <input type="number" formControlName="caloriesBurned" placeholder="0"
+                             class="w-full h-20 bg-slate-50 dark:bg-white/5 border-2 border-slate-50 dark:border-white/5 rounded-[1.8rem] pl-24 pr-8 text-2xl font-black text-slate-900 dark:text-white focus:outline-none focus:border-orange-500/50 transition-all shadow-sm">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="space-y-4">
+                  <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-600 ml-1">Start Date & Time</label>
+                  <div class="relative group">
+                    <lucide-angular [img]="Calendar" class="absolute left-8 top-1/2 -translate-y-1/2 w-7 h-7 text-slate-300 dark:text-slate-700 group-focus-within:text-primary transition-colors"></lucide-angular>
+                    <input type="datetime-local" formControlName="startTime"
+                           class="w-full h-20 bg-slate-50 dark:bg-white/5 border-2 border-slate-50 dark:border-white/5 rounded-[1.8rem] pl-24 pr-8 text-lg font-black text-slate-900 dark:text-white focus:outline-none focus:border-primary/50 transition-all shadow-sm [color-scheme:dark]">
+                  </div>
+                </div>
+
+                <!-- Extra Metrics Section -->
+                <div class="mt-16 p-12 bg-slate-900 rounded-[4rem] shadow-3xl relative overflow-hidden group border border-white/5">
+                  <div class="absolute top-0 right-0 w-80 h-80 bg-primary/10 rounded-full translate-x-32 -translate-y-32 blur-3xl group-hover:scale-110 transition-transform duration-1000"></div>
+                  <h3 class="text-white text-3xl font-black italic tracking-tighter mb-10 relative z-10 uppercase">Advanced <span class="text-primary italic">Performance Tracker</span></h3>
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+                    <div class="space-y-3">
+                      <p class="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">Distance (km)</p>
+                      <input type="number" formControlName="distance" placeholder="0.0"
+                             class="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-white font-bold focus:outline-none focus:ring-2 focus:ring-primary transition-all placeholder-white/10">
+                    </div>
+                    <div class="space-y-3">
+                      <p class="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">Heart Rate (bpm)</p>
+                      <input type="number" formControlName="heartRate" placeholder="0"
+                             class="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-white font-bold focus:outline-none focus:ring-2 focus:ring-primary transition-all placeholder-white/10">
+                    </div>
+                    <div class="space-y-3">
+                      <p class="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">Steps</p>
+                      <input type="number" formControlName="steps" placeholder="0"
+                             class="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-white font-bold focus:outline-none focus:ring-2 focus:ring-primary transition-all placeholder-white/10">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-6">
+                  <button type="submit" [disabled]="activityForm.invalid || loading()"
+                          class="w-full h-24 bg-primary hover:bg-primary/90 text-white font-black text-2xl rounded-[3rem] shadow-3xl shadow-primary/30 flex items-center justify-center gap-4 transition-all hover:-translate-y-2 active:scale-95 disabled:opacity-50 disabled:translate-y-0 uppercase tracking-[0.2em] italic cursor-pointer relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                    @if (loading()) {
+                      <svg class="animate-spin h-8 w-8 text-white" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                    } @else {
+                      <lucide-angular [img]="Check" class="w-8 h-8"></lucide-angular>
+                      <span>Log Activity</span>
+                    }
+                  </button>
+                </div>
+              </form>
+            </section>
+
+            <!-- Sidebar -->
+            <aside class="w-full lg:w-96 space-y-10 animate-in fade-in slide-in-from-right-4 duration-500 delay-200">
+              <div class="p-12 bg-primary dark:bg-primary/90 rounded-[4rem] text-white shadow-3xl relative overflow-hidden group">
+                <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full group-hover:scale-150 transition-transform duration-1000 blur-2xl"></div>
+                <lucide-angular [img]="Lightbulb" class="w-12 h-12 mb-10 relative z-10 opacity-80"></lucide-angular>
+                <h4 class="text-3xl font-black tracking-tighter italic relative z-10 leading-none uppercase text-white mb-6">Neo Intelligence <br/> <span class="text-white/40">Suggests</span></h4>
+                <p class="text-white font-medium leading-[1.8] relative z-10 text-base italic">Logging metrics accurately helps our AI provide more precise recovery plans and training intensity adjustments.</p>
+              </div>
+
+              <div class="p-12 bg-white dark:bg-slate-900/60 backdrop-blur-3xl border border-slate-50 dark:border-white/5 rounded-[4rem] shadow-2xl">
+                 <h4 class="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-10 italic leading-none">Recent <span class="text-primary italic">Record</span></h4>
+                 <div class="flex items-center gap-6">
+                   <div class="w-16 h-16 bg-slate-50 dark:bg-white/5 rounded-2xl flex items-center justify-center border border-slate-100 dark:border-white/5">
+                     <lucide-angular [img]="Activity" class="w-8 h-8 text-primary"></lucide-angular>
+                   </div>
+                   <div>
+                     <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest leading-none mb-2">Current Status</p>
+                     <p class="text-lg font-black text-slate-900 dark:text-white italic uppercase tracking-widest leading-none">Active • NeoFit</p>
+                   </div>
+                 </div>
+              </div>
+            </aside>
+          </div>
+      </main>
+    </div>
+  `,
+  styles: [`
+    :host { display: block; }
+    input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.5);
+    }
+    .dark input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.8);
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  `]
+})
+export class AddActivityComponent {
+  private fb = inject(FormBuilder);
+  private activityService = inject(ActivityService);
+  private router = inject(Router);
+  private toast = inject(ToastService);
+  themeService = inject(ThemeService);
+
+  readonly Activity = Activity;
+  readonly Clock = Clock;
+  readonly Flame = Flame;
+  readonly Calendar = Calendar;
+  readonly MapPin = MapPin;
+  readonly Heart = Heart;
+  readonly Footprints = Footprints;
+  readonly ArrowLeft = ArrowLeft;
+  readonly Check = Check;
+  readonly Sparkles = Sparkles;
+  readonly ChevronRight = ChevronRight;
+  readonly Lightbulb = Lightbulb;
+
+  loading = signal(false);
+  activityTypes = ['RUNNING', 'CYCLING', 'SWIMMING', 'YOGA', 'WEIGHTLIFTING', 'HIKING', 'DANCING', 'PILATES', 'CROSSFIT', 'OTHER'];
+
+  activityForm: FormGroup = this.fb.group({
+    activityType: ['', [Validators.required]],
+    duration: [null, [Validators.required, Validators.min(1)]],
+    caloriesBurned: [null, [Validators.required, Validators.min(0)]],
+    startTime: [new Date().toISOString().slice(0, 16), [Validators.required]],
+    distance: [null],
+    heartRate: [null],
+    steps: [null]
+  });
+
+  selectType(type: string) {
+    this.activityForm.get('activityType')?.setValue(type);
+  }
+
+  onSubmit() {
+    if (this.activityForm.valid) {
+      this.loading.set(true);
+      const formValue = this.activityForm.value;
+      const activityData = {
+        activityType: formValue.activityType,
+        duration: formValue.duration,
+        caloriesBurned: formValue.caloriesBurned,
+        startTime: formValue.startTime,
+        additionalMetrics: {
+          distanceKm: formValue.distance,
+          averageHeartRate: formValue.heartRate,
+          steps: formValue.steps
+        }
+      };
+
+      this.activityService.trackActivity(activityData as any).subscribe({
+        next: () => {
+          this.toast.success('Activity tracked successfully!');
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          this.toast.error(err.error?.message || 'Failed to track activity');
+          this.loading.set(false);
+        }
+      });
+    }
+  }
+}

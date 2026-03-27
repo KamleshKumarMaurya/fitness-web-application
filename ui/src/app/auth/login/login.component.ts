@@ -1,0 +1,123 @@
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { LucideAngularModule, LogIn, Mail, Lock } from 'lucide-angular';
+import { AuthService } from '../../core/services/auth.service';
+import { ToastService } from '../../core/services/toast.service';
+
+@Component({
+  selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, LucideAngularModule],
+  template: `
+    <div class="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-slate-950 font-sans">
+      <!-- Full Page Cinematic Background -->
+      <div class="absolute inset-0 z-0 select-none pointer-events-none">
+        <img src="fitness-bg.png" 
+             alt="Fitness background" class="w-full h-full object-cover opacity-40 scale-105 animate-pulse duration-[10s]">
+        <div class="absolute inset-0 bg-linear-to-b from-transparent via-black/30 to-black"></div>
+      </div>
+
+      <div class="w-full max-w-[460px] bg-black/70 backdrop-blur-2xl p-12 rounded-2xl shadow-[0_0_100px_rgba(0,0,0,0.9)] border border-white/5 animate-in fade-in zoom-in duration-1000 relative z-10">
+        <div class="text-center mb-14">
+          <!-- Branded Icon Style -->
+          <div class="w-24 h-24 rounded-full border-[6px] border-yellow-400 p-1 mx-auto mb-8 shadow-3xl shadow-yellow-400/10 group cursor-pointer hover:scale-110 transition-all duration-500">
+             <div class="w-full h-full bg-yellow-400 rounded-full flex items-center justify-center text-black shadow-inner">
+                <lucide-angular [img]="LogIn" class="w-10 h-10 group-hover:rotate-12 transition-transform duration-500"></lucide-angular>
+             </div>
+          </div>
+          <h1 class="text-6xl font-light text-white mb-2 tracking-tighter italic">Welcome!</h1>
+          <p class="text-[10px] font-black uppercase tracking-[0.4em] text-white/20">NeoFit Performance Center</p>
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-12">
+          <div class="space-y-2 group/field">
+            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 group-focus-within/field:text-yellow-400 transition-colors">Credential Login</label>
+            <div class="relative">
+              <input type="email" formControlName="email" placeholder="kamlesh@gmail.com"
+                     class="w-full bg-transparent border-0 border-b-2 border-slate-800 py-4 text-xl text-white placeholder-slate-700/50 focus:outline-none focus:border-yellow-400 focus:ring-0 transition-all appearance-none rounded-none font-medium">
+            </div>
+          </div>
+
+          <div class="space-y-2 group/field">
+            <div class="relative">
+              <input type="password" formControlName="password" placeholder="Password Access"
+                     class="w-full bg-transparent border-0 border-b-2 border-slate-800 py-4 text-xl text-white placeholder-slate-700/50 focus:outline-none focus:border-yellow-400 focus:ring-0 transition-all appearance-none rounded-none font-medium tracking-[0.2em]">
+              <a href="#" class="absolute right-0 bottom-4 text-[10px] font-black text-slate-600 hover:text-yellow-400 uppercase tracking-widest transition-colors">Recovery</a>
+            </div>
+          </div>
+
+          <div class="pt-8">
+            <button type="submit" [disabled]="loginForm.invalid || loading()"
+                    class="w-full h-18 bg-yellow-400 hover:bg-yellow-300 text-black font-black uppercase tracking-[0.3em] rounded-sm shadow-2xl shadow-yellow-400/20 transition-all duration-500 active:scale-[0.98] disabled:opacity-30 disabled:grayscale cursor-pointer group flex items-center justify-center">
+              @if (!loading()) {
+                <span class="text-base italic">Enter Now</span>
+              } @else {
+                <div class="flex items-center gap-3">
+                   <div class="w-5 h-5 border-3 border-black border-t-transparent rounded-full animate-spin"></div>
+                   <span class="text-sm italic">Verifying...</span>
+                </div>
+              }
+            </button>
+          </div>
+        </form>
+
+        <div class="mt-14 text-center">
+           <p class="text-[11px] text-slate-500 font-bold mb-10 tracking-wide">
+             New to the platform? 
+             <a routerLink="/auth/register" class="text-white hover:text-yellow-400 border-b-2 border-white/5 hover:border-yellow-400 pb-1 ml-2 transition-all italic">Apply for access</a>
+           </p>
+
+           <!-- Social Footer -->
+           <div class="pt-10 border-t border-white/5 flex flex-col items-center">
+              <span class="text-[16px] font-black text-white/20 select-none lowercase tracking-tighter italic">facebook.</span>
+           </div>
+        </div>
+      </div>
+    </div>
+  `,
+  styles: [`
+    :host { display: block; }
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus {
+      -webkit-text-fill-color: white !important;
+      -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+      transition: background-color 5000s ease-in-out 0s !important;
+    }
+  `]
+})
+export class LoginComponent {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private toast = inject(ToastService);
+
+  readonly LogIn = LogIn;
+  readonly Mail = Mail;
+  readonly Lock = Lock;
+
+  loading = signal(false);
+
+  loginForm: FormGroup = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]]
+  });
+
+  onSubmit() {
+    if (this.loginForm.valid) {
+      this.loading.set(true);
+      this.authService.login(this.loginForm.value).subscribe({
+        next: () => {
+          this.toast.success('Successfully logged in!');
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          this.toast.error(err.error?.message || 'Invalid email or password');
+          this.loading.set(false);
+        }
+      });
+    }
+  }
+}

@@ -1,0 +1,137 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Outfit', sans-serif;
+  --color-primary: #0a84ff;
+  --color-secondary: #5E5CE6;
+  --color-accent: #64D2FF;
+  --color-success: #30D158;
+  --color-warning: #FFD60A;
+  --color-error: #FF453A;
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 dark:bg-[#050505] text-slate-900 dark:text-slate-100 min-h-screen selection:bg-primary selection:text-white;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/70 dark:bg-black/40 backdrop-blur-2xl border border-white/20 dark:border-white/5;
+  }
+
+  .glass-dark {
+    @apply bg-black/40 backdrop-blur-2xl border border-white/5;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-linear-to-r from-primary via-secondary to-accent;
+  }
+
+  .card-hover {
+    @apply hover:scale-[1.02] hover:-translate-y-1 hover:shadow-2xl transition-all duration-500;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+@layer utilities {
+  .animate-in {
+    animation-duration: 500ms;
+    animation-fill-mode: both;
+  }
+
+  .fade-in {
+    animation-name: fadeIn;
+  }
+
+  .zoom-in {
+    animation-name: zoomIn;
+  }
+
+  .slide-in-from-bottom-4 {
+    animation-name: slideInBottom4;
+  }
+
+  .slide-in-from-left-4 {
+    animation-name: slideInLeft4;
+  }
+
+  .slide-in-from-right-4 {
+    animation-name: slideInRight4;
+  }
+
+  .slide-in-from-bottom-6 {
+    animation-name: slideInBottom6;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInBottom4 {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInBottom6 {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft4 {
+  from {
+    opacity: 0;
+    transform: translateX(-1rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight4 {
+  from {
+    opacity: 0;
+    transform: translateX(1rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

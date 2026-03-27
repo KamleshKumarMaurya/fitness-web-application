@@ -1,0 +1,245 @@
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { LucideAngularModule, Activity, Flame, Clock, Plus, ArrowRight, User, LogOut, Moon, Sun, ChevronRight, TrendingUp } from 'lucide-angular';
+import { AuthService } from '../core/services/auth.service';
+import { ActivityService, Activity as ActivityModel } from '../core/services/activity.service';
+import { ThemeService } from '../core/services/theme.service';
+import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
+
+@Component({
+  selector: 'app-dashboard',
+  standalone: true,
+  imports: [CommonModule, RouterLink, LucideAngularModule],
+  template: `
+    <div class="min-h-screen bg-white dark:bg-[#050505] font-sans transition-colors duration-500 overflow-x-hidden relative">
+      <!-- Background Decorative Elements -->
+      <div class="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden z-0">
+        <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-blue-600/10 blur-[120px] rounded-full"></div>
+        <div class="absolute top-[20%] -right-[10%] w-[30%] h-[50%] bg-purple-600/10 blur-[120px] rounded-full"></div>
+      </div>
+
+      <!-- Navbar -->
+      <nav class="sticky top-0 z-50 glass">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between items-center h-20">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-linear-to-tr from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
+                <lucide-angular [img]="Activity" class="w-6 h-6 text-white"></lucide-angular>
+              </div>
+              <span class="text-2xl font-black text-slate-900 dark:text-white tracking-tighter italic uppercase">Neo<span class="text-primary">Fit</span></span>
+            </div>
+            
+            <div class="flex items-center gap-6">
+              <button (click)="themeService.toggleDarkMode()" class="p-3 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition-colors">
+                <lucide-angular [img]="themeService.darkMode() ? Sun : Moon" class="w-5 h-5"></lucide-angular>
+              </button>
+              
+              <div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
+              
+              <div class="flex items-center gap-3 bg-slate-100 dark:bg-slate-800/50 pl-2 pr-4 py-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-all cursor-pointer group">
+                <div class="w-8 h-8 rounded-full bg-linear-to-br from-primary to-secondary flex items-center justify-center text-white text-xs font-bold ring-2 ring-white dark:ring-slate-900 ring-offset-2 ring-offset-transparent group-hover:scale-110 transition-transform">
+                  {{ authService.currentUser()?.firstName?.charAt(0) || 'U' }}
+                </div>
+                <div class="hidden sm:block">
+                  <p class="text-xs font-bold text-slate-900 dark:text-white leading-tight">{{ authService.currentUser()?.firstName }}</p>
+                  <p class="text-[10px] text-slate-500 dark:text-primary font-bold tracking-widest uppercase">Member</p>
+                </div>
+              </div>
+
+              <button (click)="authService.logout()" class="p-3 text-slate-400 hover:text-red-500 transition-colors">
+                <lucide-angular [img]="LogOut" class="w-5 h-5"></lucide-angular>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10">
+        <!-- Welcome Section -->
+        <header class="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div class="max-w-xl">
+              <p class="text-primary font-black tracking-[0.2em] uppercase text-xs mb-3 flex items-center gap-2">
+                <span class="w-8 h-[2px] bg-primary"></span>
+                My Dashboard
+              </p>
+              <h2 class="text-5xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-[0.9]">
+                Stay Active, <br/>
+                <span class="text-gradient">
+                  {{ authService.currentUser()?.firstName || 'User' }}
+                </span>
+              </h2>
+              <p class="mt-6 text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
+                You've reached <span class="text-slate-900 dark:text-white font-bold">85%</span> of your weekly goal. 
+                Focus on your <span class="text-primary font-bold">consistency</span> today!
+              </p>
+            </div>
+            <a routerLink="/activity/add" 
+               class="group flex items-center gap-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-10 py-5 rounded-2xl font-black shadow-2xl hover:translate-y-[-4px] active:translate-y-0 transition-all text-sm uppercase tracking-widest overflow-hidden relative">
+               <div class="absolute inset-0 bg-linear-to-r from-primary to-secondary translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 opacity-20"></div>
+               <lucide-angular [img]="Plus" class="w-5 h-5"></lucide-angular>
+               <span>Add Activity</span>
+            </a>
+          </div>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16" [@staggerFade]>
+          <!-- Activities Card -->
+          <div class="group relative bg-white dark:bg-slate-900/40 backdrop-blur-md p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/5 card-hover overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full group-hover:scale-150 transition-transform duration-700"></div>
+            <div class="flex flex-col h-full relative z-10">
+              <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 border border-primary/20">
+                <lucide-angular [img]="Activity" class="w-7 h-7 text-primary"></lucide-angular>
+              </div>
+              <p class="text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest text-[10px]">Total Activities</p>
+              <h3 class="text-5xl font-black text-slate-900 dark:text-white mt-2">{{ totalActivities() }}</h3>
+              <div class="mt-8 flex items-center gap-2 text-success font-bold text-[10px] bg-success/10 self-start px-3 py-1.5 rounded-full border border-success/20">
+                <lucide-angular [img]="TrendingUp" class="w-3 h-3"></lucide-angular>
+                +12% vs last week
+              </div>
+            </div>
+          </div>
+
+          <!-- Calories Card -->
+          <div class="group relative bg-white dark:bg-slate-900/40 backdrop-blur-md p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/5 card-hover overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-orange-500/5 rounded-bl-full group-hover:scale-150 transition-transform duration-700"></div>
+            <div class="flex flex-col h-full relative z-10">
+              <div class="w-14 h-14 bg-orange-500/10 rounded-2xl flex items-center justify-center mb-6 border border-orange-500/20">
+                <lucide-angular [img]="Flame" class="w-7 h-7 text-orange-500"></lucide-angular>
+              </div>
+              <p class="text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest text-[10px]">Calories Burned</p>
+              <h3 class="text-5xl font-black text-slate-900 dark:text-white mt-2">{{ totalCalories() }} <span class="text-lg font-bold text-slate-400 uppercase tracking-tighter ml-1">kcal</span></h3>
+              <div class="mt-8 flex items-center gap-2 text-rose-500 font-bold text-[10px] bg-rose-500/10 self-start px-3 py-1.5 rounded-full border border-rose-500/20">
+                <lucide-angular [img]="TrendingUp" class="w-3 h-3"></lucide-angular>
+                -4% vs last week
+              </div>
+            </div>
+          </div>
+
+          <!-- Minutes Card -->
+          <div class="group relative bg-white dark:bg-slate-900/40 backdrop-blur-md p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/5 card-hover overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-bl-full group-hover:scale-150 transition-transform duration-700"></div>
+            <div class="flex flex-col h-full relative z-10">
+              <div class="w-14 h-14 bg-secondary/10 rounded-2xl flex items-center justify-center mb-6 border border-secondary/20">
+                <lucide-angular [img]="Clock" class="w-7 h-7 text-secondary"></lucide-angular>
+              </div>
+              <p class="text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest text-[10px]">Active Minutes</p>
+              <h3 class="text-5xl font-black text-slate-900 dark:text-white mt-2">{{ totalMinutes() }} <span class="text-lg font-bold text-slate-400 uppercase tracking-tighter ml-1">min</span></h3>
+              <div class="mt-8 flex items-center gap-2 text-success font-bold text-[10px] bg-success/10 self-start px-3 py-1.5 rounded-full border border-success/20">
+                <lucide-angular [img]="TrendingUp" class="w-3 h-3"></lucide-angular>
+                +24% vs last week
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activities Section -->
+        <section class="max-w-4xl mx-auto pb-20">
+          <div class="flex items-center justify-between mb-10">
+            <h3 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight uppercase italic">
+              Recent <span class="text-slate-400 italic">Timeline</span>
+            </h3>
+            <a routerLink="/activity/list" class="text-primary font-black uppercase text-[10px] tracking-widest flex items-center gap-2 group">
+              <span>View History</span>
+              <lucide-angular [img]="ArrowRight" class="w-4 h-4 group-hover:translate-x-2 transition-transform"></lucide-angular>
+            </a>
+          </div>
+
+          <div class="space-y-4" [@listAnimation]>
+            @for (act of activityService.activities(); track act.id) {
+              <div class="group bg-white dark:bg-slate-900/40 backdrop-blur-md p-6 rounded-3xl border border-slate-100 dark:border-white/5 card-hover flex items-center gap-6 cursor-pointer"
+                   [routerLink]="['/ai/recommendation', act.id]">
+                <div class="w-14 h-14 bg-slate-100 dark:bg-white/5 rounded-2xl flex items-center justify-center group-hover:bg-primary transition-colors">
+                  <lucide-angular [img]="Activity" class="w-7 h-7 text-slate-400 dark:text-slate-600 group-hover:text-white transition-colors"></lucide-angular>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-center gap-3">
+                    <h4 class="text-xl font-black text-slate-900 dark:text-white tracking-tight uppercase italic">{{ act.activityType }}</h4>
+                    <span class="px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[8px] font-black uppercase tracking-widest">Performance {{ (act.caloriesBurned / (act.duration || 1)).toFixed(1) }}</span>
+                  </div>
+                  <div class="flex items-center gap-4 mt-1.5">
+                    <span class="text-slate-400 font-bold text-[10px] flex items-center gap-1.5 uppercase tracking-widest leading-none">
+                      <lucide-angular [img]="Clock" class="w-3 h-3"></lucide-angular> {{ act.duration }}m
+                    </span>
+                    <span class="text-slate-400 font-bold text-[10px] flex items-center gap-1.5 uppercase tracking-widest leading-none">
+                      <lucide-angular [img]="Flame" class="w-3 h-3"></lucide-angular> {{ act.caloriesBurned }}k
+                    </span>
+                    <span class="text-slate-400 font-medium text-[10px]">{{ act.startTime | date:'medium' }}</span>
+                  </div>
+                </div>
+                <div class="w-10 h-10 rounded-full border border-slate-100 dark:border-white/5 flex items-center justify-center text-slate-300 dark:text-slate-700 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all">
+                  <lucide-angular [img]="ChevronRight" class="w-4 h-4 translate-x-0.5"></lucide-angular>
+                </div>
+              </div>
+            } @empty {
+              <div class="text-center py-20 bg-slate-50 dark:bg-white/5 rounded-[3rem] border-2 border-dashed border-slate-100 dark:border-white/10">
+                <div class="w-20 h-20 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl grayscale opacity-40">
+                   <lucide-angular [img]="Activity" class="w-10 h-10 text-slate-400"></lucide-angular>
+                </div>
+                <h4 class="text-xl font-black text-slate-500 dark:text-slate-600 uppercase italic">Your journey awaits</h4>
+                <p class="text-slate-400 font-medium mt-2 max-w-xs mx-auto">Track your first activity to start receiving personalized AI recommendations.</p>
+                <a routerLink="/activity/add" class="mt-8 inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl shadow-primary/20 hover:-translate-y-1 transition-all">
+                  <lucide-angular [img]="Plus" class="w-4 h-4"></lucide-angular>
+                  Get Started
+                </a>
+              </div>
+            }
+          </div>
+        </section>
+      </main>
+    </div>
+  `,
+  animations: [
+    trigger('staggerFade', [
+      transition(':enter', [
+        query('.group', [
+          style({ opacity: 0, transform: 'translateY(20px)' }),
+          stagger(100, [
+            animate('500ms cubic-bezier(0.16, 1, 0.3, 1)', style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ]),
+    trigger('listAnimation', [
+      transition(':enter', [
+        query('.group', [
+          style({ opacity: 0, x: -20 }),
+          stagger(80, [
+            animate('400ms ease-out', style({ opacity: 1, x: 0 }))
+          ])
+        ], { optional: true })
+      ])
+    ])
+  ]
+})
+export class DashboardComponent implements OnInit {
+  authService = inject(AuthService);
+  activityService = inject(ActivityService);
+  themeService = inject(ThemeService);
+
+  readonly Activity = Activity;
+  readonly Flame = Flame;
+  readonly Clock = Clock;
+  readonly Plus = Plus;
+  readonly ArrowRight = ArrowRight;
+  readonly User = User;
+  readonly LogOut = LogOut;
+  readonly Moon = Moon;
+  readonly Sun = Sun;
+  readonly ChevronRight = ChevronRight;
+  readonly TrendingUp = TrendingUp;
+
+  totalActivities = signal(0);
+  totalCalories = signal(0);
+  totalMinutes = signal(0);
+
+  ngOnInit() {
+    this.activityService.getActivities().subscribe(activities => {
+      this.totalActivities.set(activities.length);
+      this.totalCalories.set(activities.reduce((acc, curr) => acc + curr.caloriesBurned, 0));
+      this.totalMinutes.set(activities.reduce((acc, curr) => acc + curr.duration, 0));
+    });
+  }
+}

@@ -1,0 +1,126 @@
+import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { LucideAngularModule, Activity, Clock, Flame, ChevronRight, ArrowLeft, Plus, Search, Filter } from 'lucide-angular';
+import { ActivityService, Activity as ActivityModel } from '../../core/services/activity.service';
+import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
+
+@Component({
+  selector: 'app-activity-list',
+  standalone: true,
+  imports: [CommonModule, RouterLink, LucideAngularModule],
+  template: `
+    <div class="min-h-screen bg-white dark:bg-[#050505] transition-colors duration-500 pb-20 font-sans tracking-tight relative overflow-x-hidden">
+      <!-- Background Decorative Elements -->
+      <div class="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden z-0">
+        <div class="absolute -top-[10%] -right-[10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-0 -left-[10%] w-[30%] h-[50%] bg-secondary/10 blur-[120px] rounded-full border border-secondary/20 shadow-2xl shadow-secondary/10"></div>
+      </div>
+
+      <nav class="sticky top-0 z-50 glass">
+        <div class="max-w-6xl mx-auto px-6 h-20 flex justify-between items-center">
+          <a routerLink="/dashboard" class="flex items-center gap-2 text-slate-500 dark:text-slate-400 font-black uppercase text-xs tracking-widest hover:text-primary transition-colors">
+            <lucide-angular [img]="ArrowLeft" class="w-4 h-4"></lucide-angular>
+            <span>Back</span>
+          </a>
+          <h1 class="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter italic">Activity <span class="text-primary italic">Timeline</span></h1>
+          <a routerLink="/activity/add" class="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-white shadow-2xl shadow-primary/30 hover:scale-110 active:scale-95 transition-all">
+            <lucide-angular [img]="Plus" class="w-6 h-6"></lucide-angular>
+          </a>
+        </div>
+      </nav>
+
+      <main class="max-w-6xl mx-auto px-6 py-12 relative z-10">
+        <div class="flex flex-col md:flex-row gap-6 items-center justify-between mb-16">
+          <div class="relative w-full md:w-96 group">
+            <lucide-angular [img]="Search" class="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors"></lucide-angular>
+            <input type="text" placeholder="Search activities..." 
+                   class="w-full h-16 bg-white dark:bg-white/5 border-2 border-slate-50 dark:border-white/5 rounded-[1.5rem] pl-14 pr-6 text-slate-900 dark:text-white focus:outline-none focus:border-primary/50 transition-all font-bold shadow-sm">
+          </div>
+          <button class="flex items-center gap-3 bg-white dark:bg-white/5 border-2 border-slate-50 dark:border-white/5 px-8 h-16 rounded-[1.5rem] font-black uppercase text-xs tracking-widest text-slate-500 dark:text-slate-400 hover:border-primary/50 transition-all cursor-pointer">
+             <lucide-angular [img]="Filter" class="w-4 h-4"></lucide-angular>
+             <span>Refine</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10" [@listAnimation]>
+          @for (act of activityService.activities(); track act.id) {
+            <div class="group relative bg-white dark:bg-slate-900/40 backdrop-blur-md p-10 rounded-[3.5rem] border border-slate-50 dark:border-white/5 shadow-xl card-hover cursor-pointer overflow-hidden"
+                 [routerLink]="['/ai/recommendation', act.id]">
+              <div class="absolute top-0 right-0 w-32 h-32 bg-slate-50 dark:bg-white/5 rounded-bl-[100%] transition-transform duration-700 group-hover:scale-110"></div>
+              
+              <div class="relative z-10">
+                <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-10 group-hover:bg-primary transition-all duration-500 border border-primary/20">
+                  <lucide-angular [img]="Activity" class="w-8 h-8 text-primary group-hover:text-white transition-colors duration-500"></lucide-angular>
+                </div>
+                
+                <h4 class="text-3xl font-black text-slate-900 dark:text-white italic uppercase tracking-tighter mb-2">{{ act.activityType }}</h4>
+                <p class="text-[10px] font-black uppercase text-slate-400 dark:text-slate-600 tracking-[0.2em] mb-10 flex items-center gap-3">
+                   <span class="w-2 h-2 rounded-full bg-primary/40 animate-pulse"></span>
+                   {{ act.startTime | date:'MMM d, yyyy • h:mm a' }}
+                </p>
+
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="p-5 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-100 dark:border-white/5">
+                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2 opacity-60">Duration</p>
+                    <p class="text-xl font-black text-slate-900 dark:text-white">{{ act.duration }} <span class="text-[10px] text-slate-400 italic font-black">MIN</span></p>
+                  </div>
+                  <div class="p-5 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-100 dark:border-white/5 text-right">
+                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2 opacity-60">Energy</p>
+                    <p class="text-xl font-black text-orange-500">{{ act.caloriesBurned }} <span class="text-[10px] text-slate-400 italic font-black">KCAL</span></p>
+                  </div>
+                </div>
+
+                <div class="mt-10 pt-10 border-t border-slate-50 dark:border-white/5 flex items-center justify-between group">
+                   <span class="text-xs font-black uppercase tracking-[0.1em] text-primary italic">Deep Analysis</span>
+                   <div class="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-white/5 flex items-center justify-center text-slate-300 dark:text-slate-600 group-hover:bg-primary group-hover:text-white transition-all shadow-sm border border-slate-100 dark:border-white/5">
+                     <lucide-angular [img]="ChevronRight" class="w-5 h-5"></lucide-angular>
+                   </div>
+                </div>
+              </div>
+            </div>
+          } @empty {
+            <div class="col-span-full py-40 text-center glass rounded-[4rem] border-4 border-dashed border-slate-100 dark:border-white/5">
+              <div class="w-24 h-24 bg-slate-100 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8 grayscale opacity-20">
+                 <lucide-angular [img]="Activity" class="w-12 h-12 text-slate-400"></lucide-angular>
+              </div>
+              <h4 class="text-3xl font-black text-slate-300 dark:text-slate-700 italic uppercase tracking-tighter">Your log is empty</h4>
+              <p class="text-slate-400 font-medium mt-4 mb-10 max-w-md mx-auto">Start your fitness journey today. Every movement counts towards your ultimate goal.</p>
+              <a routerLink="/activity/add" class="inline-flex items-center gap-4 bg-primary text-white px-10 py-5 rounded-2xl font-black uppercase text-sm tracking-widest hover:-translate-y-2 active:scale-95 transition-all cursor-pointer shadow-3xl shadow-primary/40">
+                 Log First Activity
+              </a>
+            </div>
+          }
+        </div>
+      </main>
+    </div>
+  `,
+  animations: [
+    trigger('listAnimation', [
+      transition(':enter', [
+        query('.group', [
+          style({ opacity: 0, scale: 0.9, y: 30 }),
+          stagger(100, [
+            animate('600ms cubic-bezier(0.16, 1, 0.3, 1)', style({ opacity: 1, scale: 1, y: 0 }))
+          ])
+        ], { optional: true })
+      ])
+    ])
+  ]
+})
+export class ActivityListComponent implements OnInit {
+  activityService = inject(ActivityService);
+
+  readonly Activity = Activity;
+  readonly Clock = Clock;
+  readonly Flame = Flame;
+  readonly ChevronRight = ChevronRight;
+  readonly ArrowLeft = ArrowLeft;
+  readonly Plus = Plus;
+  readonly Search = Search;
+  readonly Filter = Filter;
+
+  ngOnInit() {
+    this.activityService.getActivities().subscribe();
+  }
+}
