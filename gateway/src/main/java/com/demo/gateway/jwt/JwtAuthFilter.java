@@ -1,5 +1,6 @@
 package com.demo.gateway.jwt;
 
+import com.demo.gateway.service.UserValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -13,14 +14,14 @@ import reactor.core.publisher.Mono;
 public class JwtAuthFilter implements GlobalFilter {
 
     private final JwtUtil jwtUtil;
+    private final UserValidationService userValidationService;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
         String path = exchange.getRequest().getURI().getPath();
 
-        // Allow auth APIs
-        if (path.contains("/auth") || path.contains("/register")) {
+        if (path.startsWith("/auth") || path.startsWith("/register")) {
             return chain.filter(exchange);
         }
 
@@ -29,17 +30,47 @@ public class JwtAuthFilter implements GlobalFilter {
                 .getFirst("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            return exchange.getResponse().setComplete();
+            return unauthorized(exchange);
         }
 
         String token = authHeader.substring(7);
 
-        if (!jwtUtil.validateToken(token)) {
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            return exchange.getResponse().setComplete();
+        String userId;
+
+        try {
+            // ✅ Sync → use try-catch
+            if (!jwtUtil.validateToken(token)) {
+                return unauthorized(exchange);
+            }
+
+            userId = jwtUtil.extractUserId(token);
+
+        } catch (Exception e) {
+            return unauthorized(exchange);
         }
 
-        return chain.filter(exchange);
+        // ✅ Async → use reactive error handling
+        return userValidationService.validateUser(userId)
+                .flatMap(isValid -> {
+                    if (!isValid) {
+                        return unauthorized(exchange);
+                    }
+                    // ✅ Pass user info downstream
+                    exchange.getRequest().mutate()
+                            .header("Authorization", "Bearer " + token)
+                            .header("X-User-Id", userId)
+                            .build();
+
+                    return chain.filter(exchange);
+                })
+                .onErrorResume(e -> {
+                    // 🔥 handles WebClient failure
+                    return unauthorized(exchange);
+                });
+    }
+
+    private Mono<Void> unauthorized(ServerWebExchange exchange) {
+        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+        return exchange.getResponse().setComplete();
     }
 }

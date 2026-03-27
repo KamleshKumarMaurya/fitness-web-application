@@ -1,0 +1,209 @@
+2026-03-27T15:55:46.894+05:30  INFO 54632 --- [auth-service] [main] c.d.auth_service.AuthServiceApplication  : Starting AuthServiceApplication using Java 17.0.12 with PID 54632 (D:\Project-2027\Fitness-App\backend\auth-service\target\classes started by kamleshm in D:\Project-2027\Fitness-App\backend)
+2026-03-27T15:55:46.899+05:30  INFO 54632 --- [auth-service] [main] c.d.auth_service.AuthServiceApplication  : No active profile set, falling back to 1 default profile: "default"
+2026-03-27T15:55:48.113+05:30  INFO 54632 --- [auth-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-27T15:55:48.117+05:30  INFO 54632 --- [auth-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-27T15:55:48.312+05:30  INFO 54632 --- [auth-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 178 ms. Found 1 JPA repository interface.
+2026-03-27T15:55:48.353+05:30  INFO 54632 --- [auth-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-03-27T15:55:48.355+05:30  INFO 54632 --- [auth-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-03-27T15:55:48.376+05:30  INFO 54632 --- [auth-service] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.demo.auth_service.repo.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-03-27T15:55:48.376+05:30  INFO 54632 --- [auth-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 7 ms. Found 0 Redis repository interfaces.
+2026-03-27T15:55:48.803+05:30  INFO 54632 --- [auth-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=6e60d4c9-b59c-32f2-bb8f-e7c4f69d4139
+2026-03-27T15:55:49.424+05:30  INFO 54632 --- [auth-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8084 (http)
+2026-03-27T15:55:49.443+05:30  INFO 54632 --- [auth-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-03-27T15:55:49.444+05:30  INFO 54632 --- [auth-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-27T15:55:49.535+05:30  INFO 54632 --- [auth-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-03-27T15:55:49.535+05:30  INFO 54632 --- [auth-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2575 ms
+2026-03-27T15:55:49.806+05:30  INFO 54632 --- [auth-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-27T15:55:49.876+05:30  INFO 54632 --- [auth-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.44.Final
+2026-03-27T15:55:49.924+05:30  INFO 54632 --- [auth-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-03-27T15:55:50.318+05:30  INFO 54632 --- [auth-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-27T15:55:50.362+05:30  INFO 54632 --- [auth-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-03-27T15:55:50.819+05:30  INFO 54632 --- [auth-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@566cc6af
+2026-03-27T15:55:50.821+05:30  INFO 54632 --- [auth-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-03-27T15:55:50.880+05:30  WARN 54632 --- [auth-service] [main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-27T15:55:50.909+05:30  INFO 54632 --- [auth-service] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.44
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-27T15:55:51.994+05:30  INFO 54632 --- [auth-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-27T15:55:52.272+05:30  INFO 54632 --- [auth-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-27T15:55:52.664+05:30 TRACE 54632 --- [auth-service] [main] o.s.c.a.AnnotationCacheOperationSource   : Adding cacheable method 'existByUserId' with operations: [Builder[public java.lang.Boolean com.demo.auth_service.service.AuthUserService.existByUserId(java.lang.String)] caches=[user-exists] | key='#userId' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='#result == false' | sync='false']
+2026-03-27T15:55:53.198+05:30  WARN 54632 --- [auth-service] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-27T15:55:53.470+05:30  WARN 54632 --- [auth-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 9cbe0c3c-c7ea-4a4d-a364-e24a02b4990d
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-03-27T15:55:53.482+05:30  INFO 54632 --- [auth-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-03-27T15:55:54.424+05:30  INFO 54632 --- [auth-service] [main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2026-03-27T15:55:54.511+05:30  WARN 54632 --- [auth-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2026-03-27T15:55:54.587+05:30  INFO 54632 --- [auth-service] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2026-03-27T15:55:54.620+05:30  INFO 54632 --- [auth-service] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2026-03-27T15:55:54.625+05:30  INFO 54632 --- [auth-service] [main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-03-27T15:55:54.649+05:30  INFO 54632 --- [auth-service] [main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2026-03-27T15:55:54.649+05:30  INFO 54632 --- [auth-service] [main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2026-03-27T15:55:54.649+05:30  INFO 54632 --- [auth-service] [main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2026-03-27T15:55:54.649+05:30  INFO 54632 --- [auth-service] [main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2026-03-27T15:55:54.650+05:30  INFO 54632 --- [auth-service] [main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2026-03-27T15:55:54.650+05:30  INFO 54632 --- [auth-service] [main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2026-03-27T15:55:54.650+05:30  INFO 54632 --- [auth-service] [main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2026-03-27T15:55:55.150+05:30  INFO 54632 --- [auth-service] [main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2026-03-27T15:55:55.154+05:30  INFO 54632 --- [auth-service] [main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2026-03-27T15:55:55.158+05:30  INFO 54632 --- [auth-service] [main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2026-03-27T15:55:55.160+05:30  INFO 54632 --- [auth-service] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1774607155159 with initial instances count: 5
+2026-03-27T15:55:55.167+05:30  INFO 54632 --- [auth-service] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application AUTH-SERVICE with eureka with status UP
+2026-03-27T15:55:55.168+05:30  INFO 54632 --- [auth-service] [main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1774607155167, current=UP, previous=STARTING]
+2026-03-27T15:55:55.172+05:30  INFO 54632 --- [auth-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_AUTH-SERVICE/host.docker.internal:auth-service:8084: registering service...
+2026-03-27T15:55:55.213+05:30  INFO 54632 --- [auth-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8084 (http) with context path '/'
+2026-03-27T15:55:55.215+05:30  INFO 54632 --- [auth-service] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 8084
+2026-03-27T15:55:55.250+05:30  INFO 54632 --- [auth-service] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_AUTH-SERVICE/host.docker.internal:auth-service:8084 - registration status: 204
+2026-03-27T15:55:55.370+05:30  INFO 54632 --- [auth-service] [main] o.a.k.clients.consumer.ConsumerConfig    : ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.include.jmx.reporter = true
+	auto.offset.reset = earliest
+	bootstrap.servers = [localhost:9092]
+	check.crcs = true
+	client.dns.lookup = use_all_dns_ips
+	client.id = consumer-user-created-group-1
+	client.rack = 
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	enable.metrics.push = true
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = user-created-group
+	group.instance.id = null
+	group.protocol = classic
+	group.remote.assignor = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.leave.group.on.close = true
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 500
+	metadata.max.age.ms = 300000
+	metadata.recovery.strategy = none
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.kafka.common.serialization.ByteArrayDeserializer
+
+2026-03-27T15:55:55.481+05:30  INFO 54632 --- [auth-service] [main] o.a.k.c.t.i.KafkaMetricsCollector        : initializing Kafka metrics collector
+2026-03-27T15:55:56.095+05:30  INFO 54632 --- [auth-service] [main] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.9.2
+2026-03-27T15:55:56.097+05:30  INFO 54632 --- [auth-service] [main] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: 5e9866f43ab8e7e4
+2026-03-27T15:55:56.097+05:30  INFO 54632 --- [auth-service] [main] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1774607156094
+2026-03-27T15:55:56.107+05:30  INFO 54632 --- [auth-service] [main] o.a.k.c.c.i.ClassicKafkaConsumer         : [Consumer clientId=consumer-user-created-group-1, groupId=user-created-group] Subscribed to topic(s): user-create-events
+2026-03-27T15:55:56.128+05:30 DEBUG 54632 --- [auth-service] [main] o.s.d.r.l.RedisMessageListenerContainer  : Starting RedisMessageListenerContainer...
+2026-03-27T15:55:56.133+05:30 DEBUG 54632 --- [auth-service] [main] o.s.d.r.l.RedisMessageListenerContainer  : Postpone listening for Redis messages until actual listeners are added
+2026-03-27T15:55:56.218+05:30  INFO 54632 --- [auth-service] [main] c.d.auth_service.AuthServiceApplication  : Started AuthServiceApplication in 10.228 seconds (process running for 11.158)
+2026-03-27T15:55:56.979+05:30  INFO 54632 --- [auth-service] [org.springframework.kafka.KafkaListenerEndpointContainer#0-0-C-1] org.apache.kafka.clients.Metadata        : [Consumer clientId=consumer-user-created-group-1, groupId=user-created-group] Cluster ID: 5L6g3nShT-eMCtK--X86sw
+2026-03-27T15:55:56.980+05:30  INFO 54632 --- [auth-service] [org.springframework.kafka.KafkaListenerEndpointContainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-created-group-1, groupId=user-created-group] Discovered group coordinator localhost:9092 (id: 2147483646 rack: null)
+2026-03-27T15:55:56.984+05:30  INFO 54632 --- [auth-service] [org.springframework.kafka.KafkaListenerEndpointContainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-created-group-1, groupId=user-created-group] (Re-)joining group
+2026-03-27T15:55:57.006+05:30  INFO 54632 --- [auth-service] [org.springframework.kafka.KafkaListenerEndpointContainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-created-group-1, groupId=user-created-group] Request joining group due to: need to re-join with the given member-id: consumer-user-created-group-1-68f51cb3-5b97-4253-85ca-9f53a0c3108a
+2026-03-27T15:55:57.007+05:30  INFO 54632 --- [auth-service] [org.springframework.kafka.KafkaListenerEndpointContainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-created-group-1, groupId=user-created-group] (Re-)joining group
+2026-03-27T15:56:00.014+05:30  INFO 54632 --- [auth-service] [org.springframework.kafka.KafkaListenerEndpointContainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-created-group-1, groupId=user-created-group] Successfully joined group with generation Generation{generationId=31, memberId='consumer-user-created-group-1-68f51cb3-5b97-4253-85ca-9f53a0c3108a', protocol='range'}
+2026-03-27T15:56:00.028+05:30  INFO 54632 --- [auth-service] [org.springframework.kafka.KafkaListenerEndpointContainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-created-group-1, groupId=user-created-group] Finished assignment for group at generation 31: {consumer-user-created-group-1-68f51cb3-5b97-4253-85ca-9f53a0c3108a=Assignment(partitions=[user-create-events-0])}
+2026-03-27T15:56:00.040+05:30  INFO 54632 --- [auth-service] [org.springframework.kafka.KafkaListenerEndpointContainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-created-group-1, groupId=user-created-group] Successfully synced group in generation Generation{generationId=31, memberId='consumer-user-created-group-1-68f51cb3-5b97-4253-85ca-9f53a0c3108a', protocol='range'}
+2026-03-27T15:56:00.042+05:30  INFO 54632 --- [auth-service] [org.springframework.kafka.KafkaListenerEndpointContainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-created-group-1, groupId=user-created-group] Notifying assignor about the new Assignment(partitions=[user-create-events-0])
+2026-03-27T15:56:00.049+05:30  INFO 54632 --- [auth-service] [org.springframework.kafka.KafkaListenerEndpointContainer#0-0-C-1] k.c.c.i.ConsumerRebalanceListenerInvoker : [Consumer clientId=consumer-user-created-group-1, groupId=user-created-group] Adding newly assigned partitions: user-create-events-0
+2026-03-27T15:56:00.071+05:30  INFO 54632 --- [auth-service] [org.springframework.kafka.KafkaListenerEndpointContainer#0-0-C-1] o.a.k.c.c.internals.ConsumerUtils        : Setting offset for partition user-create-events-0 to the committed offset FetchPosition{offset=3, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:9092 (id: 1 rack: null)], epoch=34}}
+2026-03-27T15:56:00.078+05:30  INFO 54632 --- [auth-service] [org.springframework.kafka.KafkaListenerEndpointContainer#0-0-C-1] o.s.k.l.KafkaMessageListenerContainer    : user-created-group: partitions assigned: [user-create-events-0]
+2026-03-27T15:56:39.295+05:30  INFO 54632 --- [auth-service] [http-nio-8084-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-27T15:56:39.295+05:30  INFO 54632 --- [auth-service] [http-nio-8084-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-03-27T15:56:39.298+05:30  INFO 54632 --- [auth-service] [http-nio-8084-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-03-27T15:56:39.446+05:30  INFO 54632 --- [auth-service] [http-nio-8084-exec-1] c.d.a.controller.AuthController          : Received validation request for user ID: 1309e174-2d33-4400-97a6-6b2e0dda2564
+2026-03-27T15:56:39.539+05:30 TRACE 54632 --- [auth-service] [http-nio-8084-exec-1] o.s.cache.interceptor.CacheInterceptor   : Computed cache key '1309e174-2d33-4400-97a6-6b2e0dda2564' for operation Builder[public java.lang.Boolean com.demo.auth_service.service.AuthUserService.existByUserId(java.lang.String)] caches=[user-exists] | key='#userId' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='#result == false' | sync='false'
+2026-03-27T15:56:40.189+05:30  INFO 54632 --- [auth-service] [http-nio-8084-exec-2] c.d.a.controller.AuthController          : Received validation request for user ID: 1309e174-2d33-4400-97a6-6b2e0dda2564
+2026-03-27T15:56:40.192+05:30 TRACE 54632 --- [auth-service] [http-nio-8084-exec-2] o.s.cache.interceptor.CacheInterceptor   : Computed cache key '1309e174-2d33-4400-97a6-6b2e0dda2564' for operation Builder[public java.lang.Boolean com.demo.auth_service.service.AuthUserService.existByUserId(java.lang.String)] caches=[user-exists] | key='#userId' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='#result == false' | sync='false'
+2026-03-27T15:56:40.904+05:30 TRACE 54632 --- [auth-service] [http-nio-8084-exec-2] o.s.cache.interceptor.CacheInterceptor   : Cache entry for key '1309e174-2d33-4400-97a6-6b2e0dda2564' found in cache(s) [user-exists]
+2026-03-27T15:56:40.904+05:30 TRACE 54632 --- [auth-service] [http-nio-8084-exec-1] o.s.cache.interceptor.CacheInterceptor   : Cache entry for key '1309e174-2d33-4400-97a6-6b2e0dda2564' found in cache(s) [user-exists]
+2026-03-27T15:57:26.901+05:30  INFO 54632 --- [auth-service] [http-nio-8084-exec-5] c.d.a.controller.AuthController          : Received validation request for user ID: 1309e174-2d33-4400-97a6-6b2e0dda2564
+2026-03-27T15:57:26.902+05:30 TRACE 54632 --- [auth-service] [http-nio-8084-exec-5] o.s.cache.interceptor.CacheInterceptor   : Computed cache key '1309e174-2d33-4400-97a6-6b2e0dda2564' for operation Builder[public java.lang.Boolean com.demo.auth_service.service.AuthUserService.existByUserId(java.lang.String)] caches=[user-exists] | key='#userId' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='#result == false' | sync='false'
+2026-03-27T15:57:26.908+05:30 TRACE 54632 --- [auth-service] [http-nio-8084-exec-5] o.s.cache.interceptor.CacheInterceptor   : Cache entry for key '1309e174-2d33-4400-97a6-6b2e0dda2564' found in cache(s) [user-exists]
+2026-03-27T15:57:38.185+05:30  INFO 54632 --- [auth-service] [http-nio-8084-exec-4] c.d.a.controller.AuthController          : Received validation request for user ID: 1309e174-2d33-4400-97a6-6b2e0dda2564
+2026-03-27T15:57:38.186+05:30 TRACE 54632 --- [auth-service] [http-nio-8084-exec-4] o.s.cache.interceptor.CacheInterceptor   : Computed cache key '1309e174-2d33-4400-97a6-6b2e0dda2564' for operation Builder[public java.lang.Boolean com.demo.auth_service.service.AuthUserService.existByUserId(java.lang.String)] caches=[user-exists] | key='#userId' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='#result == false' | sync='false'
+2026-03-27T15:57:38.190+05:30 TRACE 54632 --- [auth-service] [http-nio-8084-exec-4] o.s.cache.interceptor.CacheInterceptor   : Cache entry for key '1309e174-2d33-4400-97a6-6b2e0dda2564' found in cache(s) [user-exists]
+2026-03-27T16:00:54.672+05:30  INFO 54632 --- [auth-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-03-27T16:05:54.689+05:30  INFO 54632 --- [auth-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-03-27T16:10:54.704+05:30  INFO 54632 --- [auth-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-03-27T16:15:54.715+05:30  INFO 54632 --- [auth-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-03-27T16:20:54.721+05:30  INFO 54632 --- [auth-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-03-27T16:25:54.738+05:30  INFO 54632 --- [auth-service] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-03-27T16:30:35.617+05:30  INFO 54632 --- [auth-service] [org.springframework.kafka.KafkaListenerEndpointContainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-created-group-1, groupId=user-created-group] Attempt to heartbeat failed since coordinator localhost:9092 (id: 2147483646 rack: null) is either not started or not valid
+2026-03-27T16:30:35.618+05:30  INFO 54632 --- [auth-service] [org.springframework.kafka.KafkaListenerEndpointContainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-created-group-1, groupId=user-created-group] Group coordinator localhost:9092 (id: 2147483646 rack: null) is unavailable or invalid due to cause: error response NOT_COORDINATOR. isDisconnected: false. Rediscovery will be attempted.
+2026-03-27T16:30:35.618+05:30  INFO 54632 --- [auth-service] [org.springframework.kafka.KafkaListenerEndpointContainer#0-0-C-1] o.a.k.c.c.internals.ConsumerCoordinator  : [Consumer clientId=consumer-user-created-group-1, groupId=user-created-group] Requesting disconnect from last known coordinator localhost:9092 (id: 2147483646 rack: null)
+2026-03-27T16:30:35.618+05:30  INFO 54632 --- [auth-service] [org.springframework.kafka.KafkaListenerEndpointContainer#0-0-C-1] org.apache.kafka.clients.NetworkClient   : [Consumer clientId=consumer-user-created-group-1, groupId=user-created-group] Client requested disconnect from node 2147483646
