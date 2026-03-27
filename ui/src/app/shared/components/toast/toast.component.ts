@@ -7,21 +7,7 @@ import { ToastService } from '../../../core/services/toast.service';
   selector: 'app-toast',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="fixed top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none">
-      @for (toast of toastService.toasts(); track toast) {
-        <div [@toastAnimation]
-             class="pointer-events-auto min-w-[300px] p-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-md"
-             [ngClass]="{
-               'bg-green-500/90 text-white': toast.type === 'success',
-               'bg-red-500/90 text-white': toast.type === 'error',
-               'bg-blue-500/90 text-white': toast.type === 'info'
-             }">
-          <span class="flex-1 font-medium">{{ toast.message }}</span>
-        </div>
-      }
-    </div>
-  `,
+  templateUrl: './toast.component.html',
   animations: [
     trigger('toastAnimation', [
       transition(':enter', [

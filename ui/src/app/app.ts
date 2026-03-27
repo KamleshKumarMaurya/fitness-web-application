@@ -7,10 +7,7 @@ import { ThemeService } from './core/services/theme.service';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, ToastComponent],
-  template: `
-    <router-outlet></router-outlet>
-    <app-toast></app-toast>
-  `,
+  templateUrl: './app.html',
   styles: [`:host { display: block; }`]
 })
 export class App {
